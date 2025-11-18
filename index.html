@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>fin de año</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500&display=swap" rel="stylesheet">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #000;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Contenedor principal con video y texto */
+    .contenedor-total {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2120px;
+      height: 576px;
+      transform-origin: top left;
+    }
+
+    /* 🎥 VIDEO DE FONDO */
+    video#fondo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2120px;
+      height: 576px;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    /* 📝 FRASE (posición fija dentro del video) */
+    .contenedor-frase {
+      position: absolute;
+      top: 250px;
+      left: 350px;
+      width: 1500px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0);
+      z-index: 1;
+    }
+
+    #frase {
+      font-size: 75px;
+      color: white;
+      font-family: "Archivo", sans-serif;
+      font-weight: 500;
+	  font-optical-sizing: auto;
+	  font-style: normal;
+      letter-spacing: 2px;
+      text-align: center;
+	font-variation-settings: "wdth" 100
+    }
+
+    /* 🔢 CONTADOR */
+    .contador {
+      position: absolute;
+      bottom: 42px;
+      left: 220px;
+      width: 64%;
+      text-align: center;
+      font-size: 50px;
+      font-family: "Anton", sans-serif;
+      font-weight: 400;
+      color: #2231dc;
+	  font-style: normal;
+      letter-spacing: 3px;
+	  line-height: 1;
+      text-shadow: 0 0 10px rgba(0,0,0,0);
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="contenedor-total" id="contenedor">
+    <!-- 🎥 Video de fondo -->
+    <video id="fondo" autoplay muted loop playsinline>
+      <source src="fondo.mp4" type="video/mp4">
+    </video>
+
+    <!-- 📝 Frase -->
+    <div class="contenedor-frase">
+      <div id="frase">Cargando frase...</div>
+    </div>
+
+    <!-- ⏳ Contador -->
+    <div class="contador" id="contador"></div>
+  </div>
+
+  <script>
+    const frases = [
+      "Prometiste dormir más… pero ver hacks de limpieza a las 3 a.m. era más urgente.",
+      "Prometiste que aprenderías inglés… pero aún traduces todo en Google.",
+      "Prometiste que comerías mejor… El buñuelo no cuenta, pero inténtalo.",
+      "Prometiste que harías más ejercicio… te queda 1 mes para empezar.",
+      "Prometiste ahorrar más… $20.000 pueden ser el inicio o un almuerzo.",
+      "Prometiste bajar 10 kilos… hasta que apareció el pan de bono.",
+      "Prometiste que leerías 12 libros… vas en 3, pero todavía vale.",
+      "Prometiste que harías más ejercicio… si le pones el cardio en x2, aún alcanzas.",
+    ];
+
+    let index = Math.floor(Math.random() * frases.length);
+    const elemento = document.getElementById("frase");
+
+    function cambiarFrase() {
+      elemento.textContent = frases[index];
+      index = (index + 1) % frases.length;
+    }
+
+    cambiarFrase();
+    setInterval(cambiarFrase, 10000);
+
+    /* 🕒 Cuenta regresiva */
+    const contador = document.getElementById("contador");
+    const fechaFin = new Date("December 31, 2025 23:59:59").getTime();
+
+    function actualizarContador() {
+      const ahora = new Date().getTime();
+      const diferencia = fechaFin - ahora;
+
+      if (diferencia <= 0) {
+        contador.textContent = "¡Feliz Año Nuevo! 🎉";
+        return;
+      }
+
+      const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+      const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+      const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+      contador.innerHTML = `${dias}<br>días`;
+    }
+
+    actualizarContador();
+    setInterval(actualizarContador, 1000);
+
+    /* 🔍 Escalar todo el contenedor (video + texto juntos) */
+    function escalarPantalla() {
+      const escalaX = window.innerWidth / 2120;
+      const escalaY = window.innerHeight / 576;
+      const escala = Math.min(escalaX, escalaY);
+      document.getElementById("contenedor").style.transform = `scale(${escala})`;
+    }
+
+    window.addEventListener("resize", escalarPantalla);
+    escalarPantalla();
+  </script>
+</body>
+</html>
+
+
